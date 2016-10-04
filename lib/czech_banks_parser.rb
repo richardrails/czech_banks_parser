@@ -3,8 +3,11 @@ require 'banks/fio.rb'
 require 'banks/csas.rb'
 
 class CzechBanksParser
-  def initialize(token, bank, opts = {})
+  def initialize(opts = {})
     @opts = opts
+  end
+
+  def connect(token, bank)
     case bank
       when 'csas' then Banks::Csas.new(token, config('csas'))
       when 'fio' then Banks::Fio.new(token, config('fio'))
@@ -16,7 +19,7 @@ class CzechBanksParser
     case state
       when 'csas'
         {
-          base_uri: 'https://api.csas.cz/sandbox/webapi/api/v1',
+          base_uri: 'https://api.csas.cz/sandbox/webapi/api/v3',
           auth_uri: 'https://api.csas.cz/sandbox/widp/oauth2/auth',
           token_uri: 'https://api.csas.cz/sandbox/widp/oauth2/token',
           client_id: @opts[:client_id],

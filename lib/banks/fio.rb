@@ -6,7 +6,7 @@ module Banks
       @token = token
     end
 
-    def transactions(time_start, time_end, iban)
+    def transactions(time_start, time_end, iban = nil)
       url = "#{@config[:base_uri]}/periods/#{@token}/#{time_start.strftime('%Y-%m-%d')}/#{time_end.strftime('%Y-%m-%d')}/transactions.json"
 
       trans = []

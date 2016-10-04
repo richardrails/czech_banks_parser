@@ -13,7 +13,7 @@ module Banks
     end
 
     def ibans
-      accounts.collect{|ac| ac[:accountno][:iban]}
+      accounts.collect{|ac| ac[:accountno][:cz_iban]}
     end
 
     def transactions(time_start = nil, time_end = nil, iban = nil)
