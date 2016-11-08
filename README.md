@@ -88,6 +88,8 @@ class BankTokensController < ApplicationController
 
 end
 
-
-
 ```
+
+# About
+
+&copy; Author: Richard Lapiš
