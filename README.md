@@ -22,6 +22,7 @@ opts = {}
 opts[:web_api_key] = CSAS_WEB_API_KEY
 opts[:client_id] = CSAS_CLIENT_ID
 opts[:secret] = CSAS_SECRET
+otps[:mode] = 'production' # or sandbox
 
 @parser = CzechBanksParser.new(opts).connect(token, 'csas')
 
@@ -55,7 +56,7 @@ class BankTokensController < ApplicationController
 
   def auth
     config = parser.config(params[:state])
-    redirect_to "#{config[:auth_uri]}?state=profil&redirect_uri=#{callback_account_bank_tokens_url(@account)}&client_id=#{config[:client_id]}&response_type=code"
+    redirect_to "#{config[:auth_uri]}?state=profil&redirect_uri=#{callback_account_bank_tokens_url(@account)}&client_id=#{config[:client_id]}&response_type=code&access_type=offline"
   end
 
   def callback

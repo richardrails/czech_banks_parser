@@ -19,9 +19,9 @@ class CzechBanksParser
     case state
       when 'csas'
         {
-          base_uri: 'https://api.csas.cz/sandbox/webapi/api/v3',
-          auth_uri: 'https://api.csas.cz/sandbox/widp/oauth2/auth',
-          token_uri: 'https://api.csas.cz/sandbox/widp/oauth2/token',
+          base_uri: @opts[:mode] == 'production' ? 'https://www.csast.csas.cz/webapi/api/v3' : 'https://api.csas.cz/sandbox/webapi/api/v3',
+          auth_uri: @opts[:mode] == 'production' ? 'https://www.csast.csas.cz/widp/oauth2/auth' : 'https://api.csas.cz/sandbox/widp/oauth2/auth',
+          token_uri: @opts[:mode] == 'production' ? 'https://www.csast.csas.cz/widp/oauth2/token' : 'https://api.csas.cz/sandbox/widp/oauth2/token',
           client_id: @opts[:client_id],
           secret: @opts[:secret],
           web_api_key: @opts[:web_api_key]
