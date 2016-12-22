@@ -9,11 +9,11 @@ module Banks
     end
 
     def accounts
-      JSON.parse(RestClient.get(@config[:base_uri] + '/netbanking/my/accounts', headers), symbolize_names: true)[:accounts]
+      JSON.parse(RestClient.get(@config[:base_uri] + '/netbanking/my/accounts', headers), symbolize_keys: true)['accounts']
     end
 
     def ibans
-      accounts.collect{|ac| ac[:accountno][:cz_iban]}
+      accounts.collect{|ac| ac['accountno']['cz-iban']}
     end
 
     def transactions(time_start = nil, time_end = nil, iban = nil)
@@ -21,7 +21,13 @@ module Banks
       url += "?dateStart=#{time_start.iso8601}" if time_start.present?
       url += "#{url =~ /\?/ ? '&' : '?'}dateEnd=#{time_end.iso8601}" if time_end.present?
 
-      JSON.parse RestClient.get(url, headers), symbolize_names: true
+      RestClient.log = 'stdout'
+      puts url
+      response = JSON.parse(RestClient.get(url, headers), symbolize_keys: true)
+
+      debugger
+
+      puts 'aaa'
     end
 
     private
@@ -31,8 +37,9 @@ module Banks
     end
 
     def get_token(token)
-      response = RestClient.post @config[:token_uri], {grant_type: 'refresh_token', client_id: @config[:client_id], client_secret: @config[:secret], refresh_token: token}
-      JSON.parse(response, symbolize_names: true)[:access_token]
+      # debugger
+      response = RestClient.post @config[:token_uri], {grant_type: 'refresh_token', client_id: @config[:client_id], redirect_uri: '/', client_secret: @config[:secret], refresh_token: token}, content_type: 'application/x-www-form-urlencoded'
+      JSON.parse(response, symbolize_keys: true)['access_token']
     end
   end
 end
