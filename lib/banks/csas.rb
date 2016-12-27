@@ -17,17 +17,36 @@ module Banks
     end
 
     def transactions(time_start = nil, time_end = nil, iban = nil)
-      url = @config[:base_uri] + '/netbanking/my/accounts/' + iban.to_s + '/transactions'
+      url = @config[:base_uri] + '/netbanking/cz/my/accounts/' + iban.to_s + '/transactions'
       url += "?dateStart=#{time_start.iso8601}" if time_start.present?
       url += "#{url =~ /\?/ ? '&' : '?'}dateEnd=#{time_end.iso8601}" if time_end.present?
 
-      RestClient.log = 'stdout'
-      puts url
-      response = JSON.parse(RestClient.get(url, headers), symbolize_keys: true)
+      # RestClient.log = 'stdout'
 
-      debugger
+      trans = []
+      transaction_get(url, trans, 0)
+      trans
+    end
 
-      puts 'aaa'
+    def transaction_get(url, trans, page)
+      response = JSON.parse(RestClient.get(url+"&page=#{page}", headers), symbolize_keys: true)
+
+      response['transactions'].each do |tr|
+        trans << {
+            id: tr['id'],
+            date: tr['bookingDate'],
+            amount: tr['amount']['value'],
+            currency: tr['amount']['currency'],
+            account: "#{tr['accountParty']['accountPrefix']}#{tr['accountParty']['accountNumber']}/#{tr['accountParty']['bankCode']}",
+            bank: tr['accountParty']['iban'],
+            name: tr['accountParty']['partyInfo'],
+            variable_symbol: tr['variableSymbol'],
+            message: tr['payeeNote']
+        }
+      end
+
+      transaction_get(url, trans, response['nextPage']) if response['nextPage'] != response['pageNumber']
+      trans
     end
 
     private
@@ -37,7 +56,6 @@ module Banks
     end
 
     def get_token(token)
-      # debugger
       response = RestClient.post @config[:token_uri], {grant_type: 'refresh_token', client_id: @config[:client_id], redirect_uri: '/', client_secret: @config[:secret], refresh_token: token}, content_type: 'application/x-www-form-urlencoded'
       JSON.parse(response, symbolize_keys: true)['access_token']
     end

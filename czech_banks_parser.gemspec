@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name               = "czech_banks_parser"
-  s.version            = "0.0.1"
+  s.version            = "0.0.2"
   s.default_executable = "czech_banks_parser"
   s.platform    = Gem::Platform::RUBY
   s.required_ruby_version = '>= 2.0.0'
