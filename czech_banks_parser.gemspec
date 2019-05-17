@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name               = "czech_banks_parser"
-  s.version            = "0.0.6"
+  s.version            = "0.0.7"
   s.default_executable = "czech_banks_parser"
   s.platform    = Gem::Platform::RUBY
   s.required_ruby_version = '>= 2.0.0'
@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.summary = %q{A parser from Czech Banks API's}
   s.license = 'MIT'
 
-  s.add_runtime_dependency("rest-client", "~> 1.7.3")
+  s.add_runtime_dependency("rest-client", ">= 1.7.3")
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
