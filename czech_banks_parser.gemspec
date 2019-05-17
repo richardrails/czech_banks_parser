@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.summary = %q{A parser from Czech Banks API's}
   s.license = 'MIT'
 
-  s.add_runtime_dependency("rest-client", "~> 1.7.3", ">= 1.7.3")
+  s.add_runtime_dependency("rest-client", "~> 1.7.3")
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
